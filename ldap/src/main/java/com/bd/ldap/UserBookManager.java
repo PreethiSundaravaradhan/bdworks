@@ -14,6 +14,7 @@ import com.unboundid.ldap.sdk.DeleteRequest;
 import com.unboundid.ldap.sdk.Entry;
 import com.unboundid.ldap.sdk.Filter;
 import com.unboundid.ldap.sdk.LDAPConnection;
+import com.unboundid.ldap.sdk.LDAPConnectionOptions;
 import com.unboundid.ldap.sdk.Modification;
 import com.unboundid.ldap.sdk.ModificationType;
 import com.unboundid.ldap.sdk.ModifyRequest;
@@ -113,7 +114,8 @@ public class UserBookManager{
 
     		ent.addAttribute("cn", "user");
     		ent.addAttribute("sn", "user");
-
+    		
+    		ent.addAttribute("pwdMinLength","10");
     		ent.addAttribute("pwdLockout", "TRUE");
     		ent.addAttribute("pwdLockoutDuration", "3600");
     		ent.addAttribute("pwdMaxAge", "86400");
@@ -168,9 +170,22 @@ public class UserBookManager{
         if(sfact == null) {
             sfact = SocketFactory.getDefault();
         }
+        
+        LDAPConnectionOptions _ldap_connection_options = new LDAPConnectionOptions();
+        
+        _ldap_connection_options.setUseSchema(true);
 
         LDAPConnection connection = new LDAPConnection(sfact, ldapDomain, ldapPort);
-        BindResult result = connection.bind(new SimpleBindRequest(String.format("userid=%s,"+rootDn, username), password));
+        BindResult result=null;
+        try
+        {
+         result= connection.bind(new SimpleBindRequest(String.format("userid=%s,"+rootDn, username), password));
+        System.out.println(result.getResultCode());
+        }
+        catch(Exception e)
+        {
+        	System.out.print(e.toString());
+        }
         System.out.println(result.getResultCode());
 
         if(result.getResultCode() == ResultCode.INVALID_CREDENTIALS)
