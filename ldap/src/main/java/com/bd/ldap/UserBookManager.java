@@ -40,7 +40,8 @@ public class UserBookManager{
 
             Properties prop = new Properties();
             // Load the properties file
-            InputStream inStream = new FileInputStream("C:/Users/skapoor/Desktop/Abyeti/code/ldap-java/ldap/config.properties");
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            InputStream inStream = classLoader.getResourceAsStream("./config.properties");
 
             prop.load(inStream);
             inStream.close();
