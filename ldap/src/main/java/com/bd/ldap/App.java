@@ -28,6 +28,8 @@ public class App
     public void initialize() throws Exception {
         manager.loadProperties();
     }
+    
+    // TODO: Enable LDAP authentication using Apache shiro
     public static void main( String[] args )
     {
         try {
