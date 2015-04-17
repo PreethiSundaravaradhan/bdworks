@@ -41,8 +41,8 @@ public class UserBookManager{
             Properties prop = new Properties();
             // Load the properties file
             ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-            InputStream inStream = classLoader.getResourceAsStream("./config.properties");
-
+            //InputStream inStream = classLoader.getResourceAsStream("./config.properties");
+            FileInputStream inStream=new FileInputStream("S://bd/ldap-java/ldap/target/config.properties");
             prop.load(inStream);
             inStream.close();
 
@@ -71,7 +71,7 @@ public class UserBookManager{
             List<Filter> data = new ArrayList<>();
 
             data.add(Filter.createEqualityFilter("userid", username));
-            //data.add(Filter.createEqualityFilter("uniqueIdentifier", password));
+           // data.add(Filter.createEqualityFilter("uniqueIdentifier", password));
 
             SearchResult res = connection.search(new SearchRequest(
                     rootDn, SearchScope.SUB, Filter.createANDFilter(data)
@@ -101,7 +101,7 @@ public class UserBookManager{
     	try {
 
     		// Add user to ldap directory first
-    		connection = getAdminConnection();
+    		connection = getUserConnection("billdesk","billdesk");
     		final String userDN = String.format("userid=%s,"+rootDn, userAuthData.username);
     		Entry ent = new Entry(userDN);
 
@@ -118,6 +118,9 @@ public class UserBookManager{
     		ent.addAttribute("pwdLockoutDuration", "3600");
     		ent.addAttribute("pwdMaxAge", "86400");
     		ent.addAttribute("pwdMaxFailure", "4");
+    		ent.addAttribute("pwdMinLength", "5");
+    		ent.addAttribute("pwdInHistory","4");
+    		
 
     		ent.addAttribute("userid", userAuthData.username);
     		ent.addAttribute("userPassword", userAuthData.password);

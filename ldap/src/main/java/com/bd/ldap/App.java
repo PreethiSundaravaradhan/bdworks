@@ -33,11 +33,11 @@ public class App
     public static void main( String[] args )
     {
         try {
-            String username = "billdesk";
-            String password = "billdesk";
+            String username = "billdesk43";
+            String password = "abcdxxxxxxx";
             App app = new App();
             app.initialize();
-            //app.createUser(username, password);
+            app.createUser(username, password);
             String userid = app.manager.loginUser(username, password);
             out.println("Succesfully logged in user: " + userid);
         } catch (Exception e) {
